@@ -1,0 +1,348 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MoviesModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="MoviesModelStoreContainer">
+          <EntitySet Name="Movie" EntityType="MoviesModel.Store.Movie" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ParentalNote" EntityType="MoviesModel.Store.ParentalNote" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Review" EntityType="MoviesModel.Store.Review" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ReviewParentalNote" EntityType="MoviesModel.Store.ReviewParentalNote" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="User" EntityType="MoviesModel.Store.User" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Review_Movie" Association="MoviesModel.Store.FK_Review_Movie">
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="Review" EntitySet="Review" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Review_User1" Association="MoviesModel.Store.FK_Review_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Review" EntitySet="Review" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReviewParentalNote_ParentalNote" Association="MoviesModel.Store.FK_ReviewParentalNote_ParentalNote">
+            <End Role="ParentalNote" EntitySet="ParentalNote" />
+            <End Role="ReviewParentalNote" EntitySet="ReviewParentalNote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReviewParentalNote_Review" Association="MoviesModel.Store.FK_ReviewParentalNote_Review">
+            <End Role="Review" EntitySet="Review" />
+            <End Role="ReviewParentalNote" EntitySet="ReviewParentalNote" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="varchar" Nullable="false" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="ParentalNote">
+          <Key>
+            <PropertyRef Name="Text" />
+          </Key>
+          <Property Name="Text" Type="varchar" Nullable="false" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="Review">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Site" Type="varchar" MaxLength="128" />
+          <Property Name="MovieId" Type="varchar" Nullable="false" MaxLength="128" />
+          <Property Name="UserId" Type="varchar" MaxLength="128" />
+          <Property Name="ReviewDate" Type="date" />
+          <Property Name="Rating5star" Type="int" />
+          <Property Name="Rating10star" Type="int" />
+          <Property Name="ReccommendedAge" Type="varchar" MaxLength="8" />
+          <Property Name="ReviewTitle" Type="nvarchar" MaxLength="256" />
+          <Property Name="ReviewText" Type="nvarchar(max)" />
+          <Property Name="UsefulnessNum" Type="int" />
+          <Property Name="UsefulnessOutOfNum" Type="int" />
+          <Property Name="HelpedDecideNum" Type="int" />
+          <Property Name="UsefulDetailNum" Type="int" />
+          <Property Name="ReadMyMindNum" Type="int" />
+          <Property Name="UserSex" Type="char" MaxLength="1" />
+          <Property Name="UserMinAge" Type="int" />
+          <Property Name="UserMaxAge" Type="int" />
+          <Property Name="CsmRoleRaw" Type="varchar" MaxLength="256" />
+          <Property Name="PageUrl" Type="varchar" MaxLength="1000" />
+          <Property Name="ParentalNoteRaw" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="ReviewParentalNote">
+          <Key>
+            <PropertyRef Name="ReviewId" />
+            <PropertyRef Name="Text" />
+          </Key>
+          <Property Name="ReviewId" Type="int" Nullable="false" />
+          <Property Name="Text" Type="varchar" Nullable="false" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Site" />
+          </Key>
+          <Property Name="Id" Type="varchar" Nullable="false" MaxLength="128" />
+          <Property Name="Site" Type="varchar" Nullable="false" MaxLength="128" />
+          <Property Name="Username" Type="varchar" MaxLength="128" />
+          <Property Name="MemberSince" Type="date" />
+          <Property Name="PageUrl" Type="varchar" MaxLength="1000" />
+          <Property Name="Location" Type="varchar" MaxLength="256" />
+          <Property Name="StatusAsAtCrawl" Type="varchar" MaxLength="256" />
+          <Property Name="NumOfRatings" Type="int" />
+          <Property Name="NumOfReviews" Type="int" />
+          <Property Name="RatingsAnalysisRaw" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_Review_Movie">
+          <End Role="Movie" Type="MoviesModel.Store.Movie" Multiplicity="1" />
+          <End Role="Review" Type="MoviesModel.Store.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Review_User1">
+          <End Role="User" Type="MoviesModel.Store.User" Multiplicity="0..1" />
+          <End Role="Review" Type="MoviesModel.Store.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+              <PropertyRef Name="Site" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="UserId" />
+              <PropertyRef Name="Site" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReviewParentalNote_ParentalNote">
+          <End Role="ParentalNote" Type="MoviesModel.Store.ParentalNote" Multiplicity="1" />
+          <End Role="ReviewParentalNote" Type="MoviesModel.Store.ReviewParentalNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ParentalNote">
+              <PropertyRef Name="Text" />
+            </Principal>
+            <Dependent Role="ReviewParentalNote">
+              <PropertyRef Name="Text" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReviewParentalNote_Review">
+          <End Role="Review" Type="MoviesModel.Store.Review" Multiplicity="1" />
+          <End Role="ReviewParentalNote" Type="MoviesModel.Store.ReviewParentalNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Review">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReviewParentalNote">
+              <PropertyRef Name="ReviewId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MoviesModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MoviesEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Movies" EntityType="MoviesModel.Movie" />
+          <EntitySet Name="ParentalNotes" EntityType="MoviesModel.ParentalNote" />
+          <EntitySet Name="Reviews" EntityType="MoviesModel.Review" />
+          <EntitySet Name="Users" EntityType="MoviesModel.User" />
+          <AssociationSet Name="FK_Review_Movie" Association="MoviesModel.FK_Review_Movie">
+            <End Role="Movie" EntitySet="Movies" />
+            <End Role="Review" EntitySet="Reviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Review_User1" Association="MoviesModel.FK_Review_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Review" EntitySet="Reviews" />
+          </AssociationSet>
+          <AssociationSet Name="ReviewParentalNote" Association="MoviesModel.ReviewParentalNote">
+            <End Role="ParentalNote" EntitySet="ParentalNotes" />
+            <End Role="Review" EntitySet="Reviews" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Reviews" Relationship="MoviesModel.FK_Review_Movie" FromRole="Movie" ToRole="Review" />
+        </EntityType>
+        <EntityType Name="ParentalNote">
+          <Key>
+            <PropertyRef Name="Text" />
+          </Key>
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Reviews" Relationship="MoviesModel.ReviewParentalNote" FromRole="ParentalNote" ToRole="Review" />
+        </EntityType>
+        <EntityType Name="Review">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Site" Type="String" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="MovieId" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="UserId" Type="String" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="ReviewDate" Type="DateTime" Precision="0" />
+          <Property Name="Rating5star" Type="Int32" />
+          <Property Name="Rating10star" Type="Int32" />
+          <Property Name="ReccommendedAge" Type="String" MaxLength="8" Unicode="false" FixedLength="false" />
+          <Property Name="ReviewTitle" Type="String" MaxLength="256" Unicode="true" FixedLength="false" />
+          <Property Name="ReviewText" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="UsefulnessNum" Type="Int32" />
+          <Property Name="UsefulnessOutOfNum" Type="Int32" />
+          <Property Name="HelpedDecideNum" Type="Int32" />
+          <Property Name="UsefulDetailNum" Type="Int32" />
+          <Property Name="ReadMyMindNum" Type="Int32" />
+          <Property Name="UserSex" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="UserMinAge" Type="Int32" />
+          <Property Name="UserMaxAge" Type="Int32" />
+          <Property Name="CsmRoleRaw" Type="String" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="PageUrl" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="ParentalNoteRaw" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Movie" Relationship="MoviesModel.FK_Review_Movie" FromRole="Review" ToRole="Movie" />
+          <NavigationProperty Name="User" Relationship="MoviesModel.FK_Review_User1" FromRole="Review" ToRole="User" />
+          <NavigationProperty Name="ParentalNotes" Relationship="MoviesModel.ReviewParentalNote" FromRole="Review" ToRole="ParentalNote" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Site" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="Site" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="Username" Type="String" MaxLength="128" Unicode="false" FixedLength="false" />
+          <Property Name="MemberSince" Type="DateTime" Precision="0" />
+          <Property Name="PageUrl" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="Location" Type="String" MaxLength="256" Unicode="false" FixedLength="false" />
+          <Property Name="StatusAsAtCrawl" Type="String" MaxLength="256" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Reviews" Relationship="MoviesModel.FK_Review_User1" FromRole="User" ToRole="Review" />
+          <Property Type="Int32" Name="NumOfRatings" />
+          <Property Type="Int32" Name="NumOfReviews" />
+          <Property Type="String" Name="RatingsAnalysisRaw" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Review_Movie">
+          <End Role="Movie" Type="MoviesModel.Movie" Multiplicity="1" />
+          <End Role="Review" Type="MoviesModel.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Review_User1">
+          <End Role="User" Type="MoviesModel.User" Multiplicity="0..1" />
+          <End Role="Review" Type="MoviesModel.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+              <PropertyRef Name="Site" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="UserId" />
+              <PropertyRef Name="Site" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReviewParentalNote">
+          <End Role="ParentalNote" Type="MoviesModel.ParentalNote" Multiplicity="*" />
+          <End Role="Review" Type="MoviesModel.Review" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MoviesModelStoreContainer" CdmEntityContainer="MoviesEntities">
+          <EntitySetMapping Name="Movies">
+            <EntityTypeMapping TypeName="MoviesModel.Movie">
+              <MappingFragment StoreEntitySet="Movie">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ParentalNotes">
+            <EntityTypeMapping TypeName="MoviesModel.ParentalNote">
+              <MappingFragment StoreEntitySet="ParentalNote">
+                <ScalarProperty Name="Text" ColumnName="Text" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reviews">
+            <EntityTypeMapping TypeName="MoviesModel.Review">
+              <MappingFragment StoreEntitySet="Review">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Site" ColumnName="Site" />
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ReviewDate" ColumnName="ReviewDate" />
+                <ScalarProperty Name="Rating5star" ColumnName="Rating5star" />
+                <ScalarProperty Name="Rating10star" ColumnName="Rating10star" />
+                <ScalarProperty Name="ReccommendedAge" ColumnName="ReccommendedAge" />
+                <ScalarProperty Name="ReviewTitle" ColumnName="ReviewTitle" />
+                <ScalarProperty Name="ReviewText" ColumnName="ReviewText" />
+                <ScalarProperty Name="UsefulnessNum" ColumnName="UsefulnessNum" />
+                <ScalarProperty Name="UsefulnessOutOfNum" ColumnName="UsefulnessOutOfNum" />
+                <ScalarProperty Name="HelpedDecideNum" ColumnName="HelpedDecideNum" />
+                <ScalarProperty Name="UsefulDetailNum" ColumnName="UsefulDetailNum" />
+                <ScalarProperty Name="ReadMyMindNum" ColumnName="ReadMyMindNum" />
+                <ScalarProperty Name="UserSex" ColumnName="UserSex" />
+                <ScalarProperty Name="UserMinAge" ColumnName="UserMinAge" />
+                <ScalarProperty Name="UserMaxAge" ColumnName="UserMaxAge" />
+                <ScalarProperty Name="CsmRoleRaw" ColumnName="CsmRoleRaw" />
+                <ScalarProperty Name="PageUrl" ColumnName="PageUrl" />
+                <ScalarProperty Name="ParentalNoteRaw" ColumnName="ParentalNoteRaw" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="MoviesModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="RatingsAnalysisRaw" ColumnName="RatingsAnalysisRaw" />
+                <ScalarProperty Name="NumOfReviews" ColumnName="NumOfReviews" />
+                <ScalarProperty Name="NumOfRatings" ColumnName="NumOfRatings" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Site" ColumnName="Site" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="MemberSince" ColumnName="MemberSince" />
+                <ScalarProperty Name="PageUrl" ColumnName="PageUrl" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="StatusAsAtCrawl" ColumnName="StatusAsAtCrawl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ReviewParentalNote" TypeName="MoviesModel.ReviewParentalNote" StoreEntitySet="ReviewParentalNote">
+            <EndProperty Name="ParentalNote">
+              <ScalarProperty Name="Text" ColumnName="Text" />
+            </EndProperty>
+            <EndProperty Name="Review">
+              <ScalarProperty Name="Id" ColumnName="ReviewId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
